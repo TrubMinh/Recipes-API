@@ -1,0 +1,13 @@
+export { default as Header } from "./Header";
+export { default as Footer } from "./Footer";
+export { default as Navbar } from "./Navbar";
+export { default as Searchbar } from "./Searchbar";
+export { default as BannerSlider } from "./BannerSlider";
+export { default as Title } from './Title';
+export { default as CategorySlider } from './CategorySlider';
+export { default as MealSlider } from "./MealSlider";
+export { default as Loader } from "./Loader";
+export { default as TypeList } from "./TypeList";
+export { default as PageTitle } from "./PageTitle";
+export { default as Breadcrumb } from "./Breadcrumb";
+export { default as Select } from "./Select";
