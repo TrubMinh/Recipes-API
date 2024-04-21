@@ -1,2 +1,2 @@
-export const APP_ID = "cf5fde44";
-export const APP_KEY = "5a1fa5d71f0263790afd0e8d56187d86";
+export const APP_ID = "YOUR EDAMAM APP ID";
+export const APP_KEY = "YOUR EDAMAM APP KEY";
