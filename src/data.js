@@ -38,23 +38,55 @@ const cuisinesData = [
     image: cuisines_images[0],
   },
   {
-    type: "Asian",
+    type: "British",
     image: cuisines_images[1],
   },
   {
-    type: "Chinese",
+    type: "Canadian",
     image: cuisines_images[2],
   },
   {
-    type: "French",
+    type: "Chinese",
     image: cuisines_images[3],
   },
   {
-    type: "Mexican",
+    type: "Croatian",
     image: cuisines_images[4],
   },
   {
-    type: "Middle Eastern",
+    type: "Dutch",
+    image: cuisines_images[5],
+  },
+  {
+    type: "Egyptian",
+    image: cuisines_images[6],
+  },
+  {
+    type: "Filipino",
+    image: cuisines_images[7],
+  },
+  {
+    type: "French",
+    image: cuisines_images[0],
+  },
+  {
+    type: "Greek",
+    image: cuisines_images[1],
+  },
+  {
+    type: "Indian",
+    image: cuisines_images[2],
+  },
+  {
+    type: "Irish",
+    image: cuisines_images[3],
+  },
+  {
+    type: "Italian",
+    image: cuisines_images[4],
+  },
+  {
+    type: "Jamaican",
     image: cuisines_images[5],
   },
   {
@@ -62,9 +94,53 @@ const cuisinesData = [
     image: cuisines_images[6],
   },
   {
-    type: "Italian",
+    type: "Kenyan",
     image: cuisines_images[7],
   },
+  {
+    type: "Malaysian",
+    image: cuisines_images[0],
+  },
+  {
+    type: "Mexican",
+    image: cuisines_images[1],
+  },
+  {
+    type: "Moroccan",
+    image: cuisines_images[2],
+  },
+  {
+    type: "Polish",
+    image: cuisines_images[3],
+  },
+  {
+    type: "Portuguese",
+    image: cuisines_images[4],
+  },
+  {
+    type: "Russian",
+    image: cuisines_images[5],
+  },
+  {
+    type: "Spanish",
+    image: cuisines_images[6],
+  },
+  {
+    type: "Thai",
+    image: cuisines_images[7],
+  },
+  {
+    type: "Tunisian",
+    image: cuisines_images[0],
+  },
+  {
+    type: "Turkish",
+    image: cuisines_images[1],
+  },
+  {
+    type: "Vietnamese",
+    image: cuisines_images[2],
+  }
 ];
 
 const mealTypeData = [
@@ -73,60 +149,44 @@ const mealTypeData = [
     image: meals_images[0],
   },
   {
-    type: "Lunch",
+    type: "Starter",
     image: meals_images[1],
   },
   {
-    type: "Dinner",
+    type: "Side",
     image: meals_images[2],
   },
   {
-    type: "Snack",
+    type: "Dessert",
     image: meals_images[3],
   },
   {
-    type: "Teatime",
+    type: "Lamb",
     image: meals_images[4],
-  },
+  }
 ];
 
 const dishTypeData = [
   {
-    type: "Alcohol-cocktail",
+    type: "Beef",
     image: dishes_images[0],
   },
   {
-    type: "Biscuits and cookies",
+    type: "Chicken",
     image: dishes_images[1],
   },
   {
-    type: "Desserts",
+    type: "Pasta",
     image: dishes_images[2],
   },
   {
-    type: "Starter",
+    type: "Seafood",
     image: dishes_images[3],
   },
   {
-    type: "Soup",
+    type: "Vegetarian",
     image: dishes_images[4],
-  },
-  {
-    type: "Pancake",
-    image: dishes_images[5],
-  },
-  {
-    type: "Main course",
-    image: dishes_images[6],
-  },
-  {
-    type: "Condiments and sauces",
-    image: dishes_images[7],
-  },
-  {
-    type: "Salad",
-    image: dishes_images[8],
-  },
+  }
 ];
 
 const footerLinksData = [

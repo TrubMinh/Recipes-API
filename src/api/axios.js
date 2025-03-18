@@ -1,17 +1,15 @@
 import axios from "axios";
+import { BASE_URL } from "./apiConstants";
 
-const baseURL = "https://api.edamam.com/api/recipes/v2";
+const instance = axios.create({
+  baseURL: BASE_URL,
+});
 
-function fetchData(url) {
-  const instance = axios.create();
-  // In the case of the url fetch link (E.g. next page data fetch link)
-  if (url.startsWith("http://") || url.startsWith("https://")) {
-    return instance.get(url); // if the url already contains https:// or http://
-  } else {
-    // in the case of normal fetch with base URL
-    instance.defaults.baseURL = baseURL;
-    return instance.get(url);
-  }
+function fetchData(endpoint, params = {}) {
+  // Convert params object to URLSearchParams
+  const queryString = new URLSearchParams(params).toString();
+  const url = queryString ? `${endpoint}?${queryString}` : endpoint;
+  return instance.get(url);
 }
 
 export default fetchData;

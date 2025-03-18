@@ -1,9 +1,8 @@
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { Breadcrumb, Loader, PageTitle, Select } from "../../components/common";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  getTypesRecipeNextPage,
   getTypesRecipesError,
   getTypesRecipesStatus,
   selectTypesAllRecipes,
@@ -14,29 +13,68 @@ import { STATUS } from "../../utils/status";
 import { RecipeList } from "../../components/recipe";
 
 const RecipeListPage = () => {
-  const tempData = useParams();
-  const [typeData, setTypeData] = useState(tempData);
+  const { typeOf, typeName } = useParams();
+  const navigate = useNavigate();
+  console.log('URL params:', { typeOf, typeName });
+
+  const [typeData, setTypeData] = useState({ typeOf, typeName });
   const dispatch = useDispatch();
   const recipes = useSelector(selectTypesAllRecipes);
   const recipesStatus = useSelector(getTypesRecipesStatus);
   const recipesError = useSelector(getTypesRecipesError);
-  const nextPageLink = useSelector(getTypesRecipeNextPage);
 
   useEffect(() => {
-    dispatch(fetchTypesRecipes({ typeData, nextPageLink }));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [typeData, dispatch]);
+    console.log('Effect triggered with typeData:', typeData);
+    if (typeOf && typeName) {
+      // Convert types for TheMealDB API
+      let apiType = typeOf;
+      let apiName = typeName;
+
+      // Handle special cases for TheMealDB API
+      if (typeOf === 'cuisine') {
+        apiType = 'area';
+      } else if (typeOf === 'dish' || typeOf === 'meal') {
+        apiType = 'category';
+      }
+
+      console.log('Making API call with:', { apiType, apiName });
+      dispatch(fetchTypesRecipes({ 
+        typeData: { 
+          typeOf: apiType, 
+          typeName: apiName 
+        } 
+      }));
+    }
+  }, [typeData, dispatch, typeOf, typeName]);
 
   const handleSelection = (event) => {
-    setTypeData((prevData) => {
-      return {
-        ...prevData,
-        typeName: event.target.value,
-      };
-    });
+    const newTypeName = event.target.value;
+    console.log('Selection changed to:', newTypeName);
+    // Update the URL first
+    navigate(`/recipes/${typeOf}/${newTypeName}`);
+    // Then update the state
+    setTypeData((prevData) => ({
+      ...prevData,
+      typeName: newTypeName,
+    }));
   };
 
   useEffect(() => scrollToTop(), []);
+
+  if (!typeOf || !typeName) {
+    return (
+      <div className="container py-8 custom-min-h no-results-msg">
+        <p>Invalid filter type or name!</p>
+      </div>
+    );
+  }
+
+  console.log('Current state:', {
+    recipes,
+    recipesStatus,
+    recipesError,
+    typeData
+  });
 
   return (
     <main className="recipe-list-page custom-min-h pt-[4px]">
@@ -54,23 +92,13 @@ const RecipeListPage = () => {
             {STATUS.LOADING === recipesStatus ? (
               <Loader />
             ) : STATUS.FAILED === recipesStatus ? (
-              recipesError
-            ) : (
-              <RecipeList typeData={typeData} recipes={recipes} />
-            )}
-
-            {nextPageLink?.length > 0 && (
-              <div className="next-button">
-                <button
-                  className="next-page-btn"
-                  type="button"
-                  onClick={() =>
-                    dispatch(fetchTypesRecipes({ typeData: {}, nextPageLink }))
-                  }
-                >
-                  Next Page
-                </button>
+              <div className="error-message">{recipesError}</div>
+            ) : recipes?.length === 0 ? (
+              <div className="no-results-message">
+                No recipes found for {typeName} {typeOf}
               </div>
+            ) : (
+              <RecipeList recipes={recipes} />
             )}
           </div>
         </div>

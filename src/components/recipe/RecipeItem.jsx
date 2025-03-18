@@ -4,7 +4,7 @@ import { LazyLoadImage } from "react-lazy-load-image-component";
 import { Link } from "react-router-dom";
 
 const RecipeItem = ({ recipe }) => {
-  const { image, name, cuisineType, mealType, id } = recipe || {};
+  const { image, name, category, area, id } = recipe || {};
   return (
     <div className="recipe-list-item group">
       <div className="recipe-item-top">
@@ -19,16 +19,17 @@ const RecipeItem = ({ recipe }) => {
           <h3 className="recipe-item-name">{name}</h3>
           <ul className="recipe-item-info">
             <li>
-              <span>Cuisine: &nbsp;</span>
-              <span>{cuisineType || "Unknown"}</span>
+              <span>Category: &nbsp;</span>
+              <span>{category || "Unknown"}</span>
             </li>
             <li>
-              <span>{mealType || "Unknown"}</span>
+              <span>Area: &nbsp;</span>
+              <span>{area || "Unknown"}</span>
             </li>
           </ul>
         </div>
         <Link to={`/recipes/${id}`} className="read-btn">
-          Real Full Recipe <AiOutlineArrowRight />
+          Read Full Recipe <AiOutlineArrowRight />
         </Link>
       </div>
     </div>
@@ -41,8 +42,8 @@ RecipeItem.propTypes = {
   recipe: PropTypes.shape({
     image: PropTypes.string,
     name: PropTypes.string.isRequired,
-    cuisineType: PropTypes.array,
-    mealType: PropTypes.array,
+    category: PropTypes.string,
+    area: PropTypes.string,
     id: PropTypes.string.isRequired,
   }),
 };

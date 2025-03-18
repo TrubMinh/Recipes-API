@@ -5,52 +5,86 @@ export const extractIdAfterHash = (uri) => {
 };
 
 export const extractRecipeData = (data) => {
-  let tempRecipes = data.hits.map((tempRecipe) => {
-    return {
-      id: extractIdAfterHash(tempRecipe.recipe.uri), // Example: recipe_8d3e4b9299664a1ca8e6f5bdb8532300,
-      name: tempRecipe.recipe.label,
-      image: tempRecipe.recipe.image,
-      images: tempRecipe.recipe.images,
-      source: tempRecipe.recipe.source,
-      source_url: tempRecipe.recipe.url,
-      healthLabels: tempRecipe.recipe.healthLabels,
-      ingredientLines: tempRecipe.recipe.ingredientLines,
-      ingredients: tempRecipe.recipe.ingredients,
-      calories: tempRecipe.recipe.calories,
-      totalWeight: tempRecipe.recipe.totalWeight,
-      totalTime: tempRecipe.recipe.totalTime,
-      cuisineType: tempRecipe.recipe.cuisineType,
-      mealType: tempRecipe.recipe.mealType,
-      dishType: tempRecipe.recipe.dishType,
-      nutrients: tempRecipe.recipe.totalNutrients,
-    };
+  if (!data.meals) return { data: [], nextPage: null };
+
+  let tempRecipes = data.meals.map((meal) => {
+    // Check if this is a filtered result (has idMeal) or a search result (has full meal data)
+    if (meal.idMeal) {
+      // This is a filtered result, we need to fetch the full recipe data
+      return {
+        id: meal.idMeal,
+        name: meal.strMeal,
+        image: meal.strMealThumb,
+        category: meal.strCategory || "Unknown",
+        area: meal.strArea || "Unknown",
+        instructions: meal.strInstructions || "",
+        ingredients: [],
+        measures: [],
+        source: meal.strSource || "",
+        tags: meal.strTags ? meal.strTags.split(',') : [],
+        youtube: meal.strYoutube || "",
+        dateModified: meal.dateModified || "",
+      };
+    } else {
+      // This is a search result with full meal data
+      const ingredients = [];
+      const measures = [];
+      for (let i = 1; i <= 20; i++) {
+        if (meal[`strIngredient${i}`]) {
+          ingredients.push(meal[`strIngredient${i}`]);
+          measures.push(meal[`strMeasure${i}`]);
+        }
+      }
+
+      return {
+        id: meal.idMeal,
+        name: meal.strMeal,
+        image: meal.strMealThumb,
+        category: meal.strCategory || "Unknown",
+        area: meal.strArea || "Unknown",
+        instructions: meal.strInstructions || "",
+        ingredients,
+        measures,
+        source: meal.strSource || "",
+        tags: meal.strTags ? meal.strTags.split(',') : [],
+        youtube: meal.strYoutube || "",
+        dateModified: meal.dateModified || "",
+      };
+    }
   });
 
   return {
     data: tempRecipes,
-    nextPage: data?._links?.next?.href,
+    nextPage: null, // TheMealDB doesn't support pagination
   };
 };
 
 export const extractSingleRecipeData = (data) => {
-  let tempRecipe = {
-    id: extractIdAfterHash(data.recipe.uri), // Example: recipe_8d3e4b9299664a1ca8e6f5bdb8532300,
-    name: data.recipe.label,
-    image: data.recipe.image,
-    images: data.recipe.images,
-    source: data.recipe.source,
-    source_url: data.recipe.url,
-    healthLabels: data.recipe.healthLabels,
-    ingredientLines: data.recipe.ingredientLines,
-    ingredients: data.recipe.ingredients,
-    calories: data.recipe.calories,
-    totalWeight: data.recipe.totalWeight,
-    totalTime: data.recipe.totalTime,
-    cuisineType: data.recipe.cuisineType,
-    mealType: data.recipe.mealType,
-    dishType: data.recipe.dishType,
-    nutrients: data.recipe.totalNutrients,
-  };
+  if (!data.meals || !data.meals[0]) return null;
+  
+  const meal = data.meals[0];
+  const ingredients = [];
+  const measures = [];
+  
+  for (let i = 1; i <= 20; i++) {
+    if (meal[`strIngredient${i}`]) {
+      ingredients.push(meal[`strIngredient${i}`]);
+      measures.push(meal[`strMeasure${i}`]);
+    }
+  }
 
-  return tempRecipe;
+  return {
+    id: meal.idMeal,
+    name: meal.strMeal,
+    image: meal.strMealThumb,
+    category: meal.strCategory,
+    area: meal.strArea,
+    instructions: meal.strInstructions,
+    ingredients,
+    measures,
+    source: meal.strSource,
+    tags: meal.strTags ? meal.strTags.split(',') : [],
+    youtube: meal.strYoutube,
+    dateModified: meal.dateModified,
+  };
 };

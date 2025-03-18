@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { APP_ID, APP_KEY } from "../../api/apiConstants";
+import { ENDPOINTS } from "../../api/apiConstants";
 import fetchData from "../../api/axios";
 import {
   extractRecipeData,
@@ -10,10 +10,7 @@ export const fetchRecipes = createAsyncThunk(
   "recipes/fetchRecipes",
   async (queryText = "chicken") => {
     try {
-      // searching chicken recipes by default
-      const { data } = await fetchData(
-        `?type=public&app_id=${APP_ID}&app_key=${APP_KEY}&q=${queryText}`
-      );
+      const { data } = await fetchData(ENDPOINTS.SEARCH, { s: queryText });
       let recipesData = extractRecipeData(data);
       return recipesData;
     } catch (error) {
@@ -24,21 +21,10 @@ export const fetchRecipes = createAsyncThunk(
 
 export const fetchSearchRecipe = createAsyncThunk(
   "recipes/fetchSearchRecipes",
-  async ({ queryText, nextPageLink }) => {
+  async ({ queryText }) => {
     try {
-      let recipesData = null;
-
-      if (!nextPageLink) {
-        const { data } = await fetchData(
-          `?type=public&app_id=${APP_ID}&app_key=${APP_KEY}&q=${queryText}`
-        );
-        recipesData = extractRecipeData(data);
-        recipesData;
-      } else {
-        const { data } = await fetchData(`${nextPageLink}`);
-        recipesData = extractRecipeData(data);
-      }
-
+      const { data } = await fetchData(ENDPOINTS.SEARCH, { s: queryText });
+      let recipesData = extractRecipeData(data);
       return recipesData;
     } catch (error) {
       throw Error("Failed to search recipes.");
@@ -50,9 +36,7 @@ export const fetchSingleRecipe = createAsyncThunk(
   "recipe/fetchSingleRecipes",
   async (recipeId) => {
     try {
-      const { data } = await fetchData(
-        `/${recipeId}?type=public&app_id=${APP_ID}&app_key=${APP_KEY}`
-      );
+      const { data } = await fetchData(ENDPOINTS.LOOKUP, { i: recipeId });
       let recipeData = extractSingleRecipeData(data);
       return recipeData;
     } catch (error) {

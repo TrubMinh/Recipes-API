@@ -7,22 +7,17 @@ import { fetchSingleRecipe } from "../../redux/utils/recipeUtils";
 import { selectSingleRecipe } from "../../redux/store/recipesSlice";
 import { Loader } from "../../components/common";
 import {
-  AiFillFire,
   AiOutlineCheckSquare,
-  AiOutlineFieldTime,
+  AiOutlineUser,
+  AiOutlineYoutube,
 } from "react-icons/ai";
-import { BiDish } from "react-icons/bi";
-import { GiWeightScale } from "react-icons/gi";
-import "lightbox2/dist/css/lightbox.css";
-import "lightbox2/dist/js/lightbox";
+import { BiDish, BiWorld } from "react-icons/bi";
 
 const RecipeSinglePage = () => {
   const { id: recipeId } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const recipe = useSelector(selectSingleRecipe);
-  let tempNutrients = [];
-  let tempImages = [];
 
   useEffect(() => scrollToTop(), []);
 
@@ -30,10 +25,7 @@ const RecipeSinglePage = () => {
     dispatch(fetchSingleRecipe(recipeId));
   }, [recipeId, dispatch]);
 
-  if (recipe) {
-    Object.entries(recipe?.nutrients).map((value) => tempNutrients.push(value));
-    Object.entries(recipe?.images).map((value) => tempImages.push(value));
-  } else {
+  if (!recipe) {
     return <Loader />;
   }
 
@@ -49,94 +41,69 @@ const RecipeSinglePage = () => {
             <BsArrowLeft className="me-2" /> Go Back
           </button>
 
-          <h3 className="recipe-single-name">{recipe?.name}</h3>
+          <h3 className="recipe-single-name">{recipe.name}</h3>
           {/* details section one */}
           <div className="recipe-group-one">
             <div className="recipe-left">
               <div className="recipe-left-img-wrapper">
-                <img src={recipe?.image} alt={recipe?.name} />
+                <img src={recipe.image} alt={recipe.name} />
               </div>
-              <a href={recipe?.source_url}>
-                <span>Source:</span> {recipe?.source_url}
-              </a>
             </div>
 
             <div className="recipe-right">
-              <h4 className="recipe-right-name">{recipe?.name}</h4>
-              <p className="badge-orange">{recipe?.cuisineType.join(", ")}</p>
+              <h4 className="recipe-right-name">{recipe.name}</h4>
+              <div className="flex gap-2 mb-4">
+                <span className="badge-orange">{recipe.area}</span>
+                <span className="badge-orange">{recipe.category}</span>
+              </div>
+              
               <div className="recipe-block general-info">
                 <div className="block-list">
                   <div className="list-elem">
                     <div className="list-elem-left">
-                      <AiFillFire className="me-2" />
-                      <span>calories</span>
+                      <BiWorld className="me-2" />
+                      <span>Area</span>
                     </div>
-                    <span className="list-elem-value">
-                      {recipe?.calories?.toFixed(4)}
-                    </span>
+                    <span className="list-elem-value">{recipe.area}</span>
                   </div>
-
                   <div className="list-elem">
                     <div className="list-elem-left">
                       <BiDish className="me-2" />
-                      <span>dish type</span>
+                      <span>Category</span>
                     </div>
-                    <span className="list-elem-value">
-                      {recipe?.dishType.join(", ")}
-                    </span>
+                    <span className="list-elem-value">{recipe.category}</span>
                   </div>
-
-                  <div className="list-elem">
-                    <div className="list-elem-left">
-                      <GiWeightScale className="me-2" />
-                      <span>Weight</span>
-                    </div>
-                    <span className="list-elem-value">
-                      {recipe?.totalWeight?.toFixed(4)}
-                    </span>
-                  </div>
-
-                  <div className="list-elem">
-                    <div className="list-elem-left">
-                      <AiOutlineFieldTime className="me-2" />
-                      <span>Time</span>
-                    </div>
-                    <span className="list-elem-value">{recipe?.totalTime}</span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="recipe-block health-labels">
-                <p className="block-title">Health Label:</p>
-                <ul className="block-list">
-                  {recipe?.healthLabels?.slice(0, 10).map((label, idx) => (
-                    <li key={idx}>{label.replace("-", " ")}</li>
-                  ))}
-                </ul>
-              </div>
-
-              <div className="recipe-block images">
-                <p className="block-title">Images (different size) :</p>
-                <div className="block-list">
-                  {tempImages?.map((image, idx) => (
-                    <div key={idx} className="block-list-item-wrapper">
-                      <a
-                        href={image[1].url}
-                        data-lightbox="images"
-                        className="block-list-item"
+                  {recipe.source && (
+                    <div className="list-elem">
+                      <div className="list-elem-left">
+                        <AiOutlineUser className="me-2" />
+                        <span>Source</span>
+                      </div>
+                      <a 
+                        href={recipe.source} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="list-elem-value text-blue-600 hover:underline"
                       >
-                        <img src={image[1].url} alt={image[0]} />
+                        View Source
                       </a>
-                      <p className="image-item-info">
-                        <span className="image-item-size">
-                          {image[1].width} x {image[1].height}
-                        </span>
-                        <span className="image-item-name">({image[0]})</span>
-                      </p>
                     </div>
-                  ))}
+                  )}
                 </div>
               </div>
+
+              {recipe.tags && recipe.tags.length > 0 && (
+                <div className="recipe-block health-labels">
+                  <p className="block-title">Tags:</p>
+                  <ul className="block-list flex flex-wrap gap-2">
+                    {recipe.tags.map((tag, idx) => (
+                      <li key={idx} className="bg-gray-100 px-3 py-1 rounded-full text-sm">
+                        {tag.trim()}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             </div>
           </div>
           {/* end of details section one */}
@@ -146,18 +113,13 @@ const RecipeSinglePage = () => {
           <div className="recipe-block ingredients">
             <p className="block-title text-lg">Ingredients:</p>
             <ul className="block-list">
-              {recipe?.ingredients?.map((ingredient, idx) => (
+              {recipe.ingredients.map((ingredient, idx) => (
                 <li key={idx} className="block-list-item">
                   <AiOutlineCheckSquare className="text-jet" size={22} />
                   <div>
-                    <p className="font-semibold">{ingredient?.text}</p>
+                    <p className="font-semibold">{ingredient}</p>
                     <div className="badges-group">
-                      <span>Measure:</span> {ingredient?.quantity}
-                      {ingredient?.measure} &nbsp;
-                      <span>Weight:</span>
-                      {ingredient?.weight.toFixed(1)} &nbsp;
-                      <span>Food:</span>
-                      {ingredient?.food}
+                      <span>Measure:</span> {recipe.measures[idx]}
                     </div>
                   </div>
                 </li>
@@ -165,19 +127,32 @@ const RecipeSinglePage = () => {
             </ul>
           </div>
 
-          <div className="recipe-block nutrients">
-            <p className="block-title text-lg">Nutrient:</p>
-            <ul className="block-list">
-              {tempNutrients?.map((nutrient, idx) => (
-                <div key={idx} className="block-list-item">
-                  <li>{nutrient[1].label}</li>
-                  <li>
-                    {nutrient[1].quantity.toFixed(1)} {nutrient[1].unit}
-                  </li>
-                </div>
-              ))}
-            </ul>
+          <div className="recipe-block instructions">
+            <p className="block-title text-lg">Instructions:</p>
+            <div className="block-list">
+              <p className="whitespace-pre-line">{recipe.instructions}</p>
+            </div>
           </div>
+
+          {recipe.youtube && (
+            <div className="recipe-block youtube">
+              <p className="block-title text-lg flex items-center gap-2">
+                <AiOutlineYoutube className="text-red-600" size={24} />
+                Watch on YouTube:
+              </p>
+              <div className="block-list">
+                <a
+                  href={recipe.youtube}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-600 hover:underline flex items-center gap-2"
+                >
+                  <AiOutlineYoutube size={20} />
+                  Watch Video
+                </a>
+              </div>
+            </div>
+          )}
         </div>
       </section>
     </main>
