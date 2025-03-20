@@ -67,79 +67,79 @@ const cuisinesData = [
   },
   {
     type: "French",
-    image: cuisines_images[0],
+    image: cuisines_images[8],
   },
   {
     type: "Greek",
-    image: cuisines_images[1],
+    image: cuisines_images[9],
   },
   {
     type: "Indian",
-    image: cuisines_images[2],
+    image: cuisines_images[10],
   },
   {
     type: "Irish",
-    image: cuisines_images[3],
+    image: cuisines_images[11],
   },
   {
     type: "Italian",
-    image: cuisines_images[4],
+    image: cuisines_images[12],
   },
   {
     type: "Jamaican",
-    image: cuisines_images[5],
+    image: cuisines_images[13],
   },
   {
     type: "Japanese",
-    image: cuisines_images[6],
+    image: cuisines_images[14],
   },
   {
     type: "Kenyan",
-    image: cuisines_images[7],
+    image: cuisines_images[15],
   },
   {
     type: "Malaysian",
-    image: cuisines_images[0],
+    image: cuisines_images[16],
   },
   {
     type: "Mexican",
-    image: cuisines_images[1],
+    image: cuisines_images[17],
   },
   {
     type: "Moroccan",
-    image: cuisines_images[2],
+    image: cuisines_images[18],
   },
   {
     type: "Polish",
-    image: cuisines_images[3],
+    image: cuisines_images[19],
   },
   {
     type: "Portuguese",
-    image: cuisines_images[4],
+    image: cuisines_images[20],
   },
   {
     type: "Russian",
-    image: cuisines_images[5],
+    image: cuisines_images[21],
   },
   {
     type: "Spanish",
-    image: cuisines_images[6],
+    image: cuisines_images[22],
   },
   {
     type: "Thai",
-    image: cuisines_images[7],
+    image: cuisines_images[23],
   },
   {
     type: "Tunisian",
-    image: cuisines_images[0],
+    image: cuisines_images[24],
   },
   {
     type: "Turkish",
-    image: cuisines_images[1],
+    image: cuisines_images[ 25],
   },
   {
     type: "Vietnamese",
-    image: cuisines_images[2],
+    image: cuisines_images[26],
   }
 ];
 
